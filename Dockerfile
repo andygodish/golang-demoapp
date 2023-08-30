@@ -1,4 +1,4 @@
-FROM golang:1.20.5 as dev
+FROM golang:1.21 as dev
 
 WORKDIR /work
 
@@ -17,13 +17,14 @@ USER user
 RUN go install golang.org/x/tools/cmd/godoc@latest
 RUN go install github.com/kisielk/errcheck@latest
 
-FROM golang:1.20.5 as build
+FROM golang:1.21 as build
 
 WORKDIR /app
-COPY ./app/* /app/
-RUN go build -o app
+COPY . /app/
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-FROM alpine as runtime
+# We don't want the entire go sdk in here
+FROM alpine as runtime 
 
 COPY --from=build /app/app /
 CMD ./app
