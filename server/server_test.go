@@ -10,12 +10,20 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-type StubBitcoinPriceStore struct {
+// type StubBitcoinPriceStore struct {
+// 	price coinbase.Price
+// }
+
+// func (s *StubBitcoinPriceStore) GetSellPrice() coinbase.Price {
+// 	return s.price
+// }
+
+type MockPricePopulator struct {
 	price coinbase.Price
 }
 
-func (s *StubBitcoinPriceStore) GetSellPrice() coinbase.Price {
-	return s.price
+func (m *MockPricePopulator) GetSellPrice() (coinbase.Price, error) {
+	return m.price, nil
 }
 
 func TestGETBtcSellPrice(t *testing.T) {
@@ -23,8 +31,9 @@ func TestGETBtcSellPrice(t *testing.T) {
 		Amount:   "1020.25",
 		Currency: "USD",
 	}
-	store := StubBitcoinPriceStore{wantedPrice}
-	server := NewServer(&store)
+
+	mock := &MockPricePopulator{wantedPrice}
+	server := NewServer(mock)
 
 	t.Run("Returns the current sell price of bitcoin", func(t *testing.T) {
 		request, _ := http.NewRequest(http.MethodGet, "/prices/BTC-USD/sell", nil)

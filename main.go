@@ -9,14 +9,11 @@ import (
 	"github.com/andygodish/golang-demoapp/server"
 )
 
-type InMemoryPlayerStore struct {
-}
-
-func (i *InMemoryPlayerStore) GetSellPrice() coinbase.Price {
-	// return coinbase.Price{
-	// 	Amount:   "1020.25",
-	// 	Currency: "USD",
-	// }
+// This store really isn't necessary other than that it allows me to stub 
+// a store in my test in order to mock returns values from the coinbase API
+type InMemoryStore struct {}
+func (i *InMemoryStore) GetSellPrice() coinbase.Price {
+	return coinbase.Price{}
 }
 
 // create an HTTP endpoint that returns the price of Bitcoin
@@ -32,9 +29,7 @@ func main() {
 	// Print the retrieved price
 	fmt.Printf("BTC Sell Price: %s %s\n", price.Amount, price.Currency)
 
-	store := InMemoryPlayerStore{}
-
-	server := server.NewServer(&store)
+	server := server.NewServer(pp)
 
 	log.Fatal(http.ListenAndServe(":5000", server))
 }

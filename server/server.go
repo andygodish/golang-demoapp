@@ -2,26 +2,29 @@ package server
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/andygodish/golang-demoapp/coinbase"
 )
 
-type BitcoinPriceStore interface {
-	GetSellPrice() coinbase.Price
+type PricePopulator interface {
+	GetSellPrice() (coinbase.Price, error)
 }
 
 type MyServer struct {
-	Store        BitcoinPriceStore
+	PricePopulator
 	http.Handler // the server now has all the methods of http.Handler embbded in it
 }
 
-func NewServer(store BitcoinPriceStore) *MyServer {
-	s := new(MyServer)
+func NewServer(pp PricePopulator) *MyServer {
+	s := &MyServer{
+		PricePopulator: pp,
+	}
 
 	router := http.NewServeMux()
-
 	router.Handle("/prices/BTC-USD/sell", http.HandlerFunc(s.BtcSellPriceHandler))
+
 	s.Handler = router
 
 	return s
@@ -34,14 +37,9 @@ func (m *MyServer) BtcSellPriceHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (m *MyServer) getSellPrice() coinbase.Price {
-	// pp := coinbase.NewPricePoplulator()
-	// price, err := pp.GetSellPrice()
-	// if err != nil {
-	// 	log.Fatalf("Failed to get BTC sell price: %v", err)
-	// }
-	// return price
-	return coinbase.Price{
-		Amount:   "1020.25",
-		Currency: "USD",
+	price, err := m.GetSellPrice()
+	if err != nil {
+		log.Fatalf("Failed to get BTC sell price: %v", err)
 	}
+	return price
 }
