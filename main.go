@@ -12,8 +12,11 @@ import (
 type InMemoryPlayerStore struct {
 }
 
-func (i *InMemoryPlayerStore) GetSellPrice() string {
-	return "1020.25"
+func (i *InMemoryPlayerStore) GetSellPrice() coinbase.Price {
+	// return coinbase.Price{
+	// 	Amount:   "1020.25",
+	// 	Currency: "USD",
+	// }
 }
 
 // create an HTTP endpoint that returns the price of Bitcoin
@@ -29,8 +32,9 @@ func main() {
 	// Print the retrieved price
 	fmt.Printf("BTC Sell Price: %s %s\n", price.Amount, price.Currency)
 
-	server := &server.MyServer{
-		Store: &InMemoryPlayerStore{},
-	}
+	store := InMemoryPlayerStore{}
+
+	server := server.NewServer(&store)
+
 	log.Fatal(http.ListenAndServe(":5000", server))
 }
