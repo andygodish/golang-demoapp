@@ -24,6 +24,10 @@ on:
       - "docs/**"
       - "CODEOWNERS"
 
+# Before this was added, I was getting this error:
+# Error: Can't find 'action.yml', 'action.yaml' or 'Dockerfile' under 
+# '/home/runner/work/golang-demoapp/golang-demoapp/.github/actions/golang/action.yaml'. 
+# Did you forget to run actions/checkout before running your local action?
 permissions:
   contents: read
 
