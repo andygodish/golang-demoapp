@@ -1,7 +1,4 @@
-# This workflow will build a golang project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
-
-name: Go
+name: Test
 
 on:
   push:
@@ -27,8 +24,10 @@ on:
       - "docs/**"
       - "CODEOWNERS"
 
-jobs:
+permissions:
+  contents: read
 
+jobs:
   test:
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +35,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Setup-golang
-      uses: ./.github/actions/golang/action.yaml
+      uses: ./.github/actions/golang
 
     - name: Run unit tests
       run: make test-unit
