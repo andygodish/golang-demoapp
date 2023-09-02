@@ -1,0 +1,14 @@
+name: setup-golang
+description: 'Set up your GitHub Actions workflow with a specific version of Go + caching'
+
+runs: 
+  # Composite run steps allow you to run multiple steps inside a single action, combining multiple commands into a single action.
+	using: composite
+	steps:
+	- uses: actions/setup-go@v4
+	  with:
+		  go-version: '1.21'
+			# GitHub Actions provides a caching feature that allows you to persist data between jobs in a workflow. This can be particularly useful 
+			# for dependencies that don't change often but take a long time to download or compile. By caching them, you can significantly speed up 
+			# your workflow runs.
+			cache: true
