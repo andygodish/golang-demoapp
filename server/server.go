@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/andygodish/golang-demoapp/coinbase"
+	"github.com/go-chi/chi/v5"
 )
 
 type PricePopulator interface {
@@ -17,12 +18,12 @@ type MyServer struct {
 }
 
 func NewServer(pp PricePopulator) *MyServer {
+	router := chi.NewRouter()
 	s := &MyServer{
 		PricePopulator: pp,
 	}
 
-	router := http.NewServeMux()
-	router.Handle("/prices/BTC-USD/sell", http.HandlerFunc(s.BtcSellPriceHandler))
+	router.Get("/prices/BTC-USD/sell", s.BtcSellPriceHandler)
 
 	s.Handler = router
 
