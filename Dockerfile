@@ -21,10 +21,13 @@ FROM golang:1.21 as build
 
 WORKDIR /app
 COPY . /app/
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+# RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+RUN go build -o app .
 
 # We don't want the entire go sdk in here
-FROM alpine as runtime 
+FROM debian:12-slim as runtime 
+
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8080
 
