@@ -26,5 +26,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 # We don't want the entire go sdk in here
 FROM alpine as runtime 
 
+EXPOSE 8080
+
 COPY --from=build /app/app /
 CMD ./app

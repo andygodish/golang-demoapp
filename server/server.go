@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/andygodish/golang-demoapp/coinbase"
@@ -31,15 +30,13 @@ func NewServer(pp PricePopulator) *MyServer {
 }
 
 func (m *MyServer) BtcSellPriceHandler(w http.ResponseWriter, r *http.Request) {
+	sellPrice, err := m.PricePopulator.GetSellPrice()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set("content-type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(m.getSellPrice())
-}
-
-func (m *MyServer) getSellPrice() coinbase.Price {
-	price, err := m.GetSellPrice()
-	if err != nil {
-		log.Fatalf("Failed to get BTC sell price: %v", err)
-	}
-	return price
+	json.NewEncoder(w).Encode(sellPrice)
 }
