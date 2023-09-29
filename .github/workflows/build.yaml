@@ -34,10 +34,10 @@ jobs:
     - name: Build image
       run: docker build -t ${{ env.image }}:${{ env.SEM_VER }} .
 
-		- name: Tag Latest
-			run : docker tag ${{ env.image }}:${{ env.SEM_VER }} ${{ env.image }}:latest
+    - name: Tag Latest
+      run : docker tag ${{ env.image }}:${{ env.SEM_VER }} ${{ env.image }}:latest
 
     - name: Push image
       run: |
-			  docker push ${{ env.image }}:${{ env.SEM_VER }}
-				docker push ${{ env.image }}:latest
+        docker push ${{ env.image }}:${{ env.SEM_VER }}
+        docker push ${{ env.image }}:latest
