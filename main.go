@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -9,6 +10,8 @@ import (
 )
 
 func main() {
+	fmt.Println("Starting server on port 8080")
+	
 	pp := coinbase.NewPricePoplulator()
 	server := server.NewServer(pp)
 	log.Fatal(http.ListenAndServe(":8080", server))
