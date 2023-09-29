@@ -1,6 +1,7 @@
-name: Test
+name: CI
 
 on:
+  workkflow_dispatch:
   push:
     branches: [ "main" ]
     paths-ignore:
@@ -29,7 +30,7 @@ on:
 # '/home/runner/work/golang-demoapp/golang-demoapp/.github/actions/golang/action.yaml'. 
 # Did you forget to run actions/checkout before running your local action?
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   test:
@@ -41,5 +42,13 @@ jobs:
     - name: Setup-golang
       uses: ./.github/actions/golang
 
+    - name: Go build
+      run: go build -o app
+
     - name: Run unit tests
       run: make test-unit
+
+    - name: Semantic release
+      uses: go-semantic-release/action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
