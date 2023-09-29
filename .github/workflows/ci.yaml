@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  workkflow_dispatch:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
     paths-ignore:
