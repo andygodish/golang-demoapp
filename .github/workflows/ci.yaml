@@ -33,7 +33,7 @@ permissions:
   contents: write
 
 jobs:
-  test:
+  CI:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
