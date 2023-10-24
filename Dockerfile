@@ -29,7 +29,9 @@ FROM debian:12-slim as runtime
 
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
-EXPOSE 8080
-
 COPY --from=build /app/app /
+
+COPY sshd_config /etc/ssh/
+
+EXPOSE 8080 8000 2222
 CMD ./app
