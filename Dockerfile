@@ -29,6 +29,15 @@ FROM debian:12-slim as runtime
 
 RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
+COPY entrypoint.sh ./
+
+# Start and enable SSH
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends dialog \
+    && apt-get install -y --no-install-recommends openssh-server \
+    && echo "root:Docker!" | chpasswd \
+    && chmod u+x ./entrypoint.sh
+
 COPY --from=build /app/app /
 
 COPY sshd_config /etc/ssh/
