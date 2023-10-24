@@ -37,8 +37,8 @@ RUN apt-get update \
 RUN echo "root:Docker!" | chpasswd 
 
 COPY entrypoint.sh ./
-COPY --from=build /app/app /
 COPY sshd_config /etc/ssh/
+COPY --from=build /app/app /
 
 RUN chmod u+x ./entrypoint.sh
 
