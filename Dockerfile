@@ -27,20 +27,20 @@ RUN go build -o app .
 # We don't want the entire go sdk in here
 FROM debian:12-slim as runtime 
 
-RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
 
-COPY entrypoint.sh ./
-
-# Start and enable SSH
 RUN apt-get update \
+    && apt-get install -y ca-certificates \
     && apt-get install -y --no-install-recommends dialog \
     && apt-get install -y --no-install-recommends openssh-server \
-    && echo "root:Docker!" | chpasswd \
-    && chmod u+x ./entrypoint.sh
+    && rm -rf /var/lib/apt/lists/*
 
+RUN echo "root:Docker!" | chpasswd 
+
+COPY entrypoint.sh ./
 COPY --from=build /app/app /
-
 COPY sshd_config /etc/ssh/
+
+RUN chmod u+x ./entrypoint.sh
 
 EXPOSE 8080 8000 2222
 
