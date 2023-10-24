@@ -43,4 +43,8 @@ COPY --from=build /app/app /
 COPY sshd_config /etc/ssh/
 
 EXPOSE 8080 8000 2222
+
+ENTRYPOINT [ "./entrypoint.sh" ] 
+
 CMD ./app
+
