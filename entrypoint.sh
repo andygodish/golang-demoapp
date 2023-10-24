@@ -1,4 +1,8 @@
 #!/bin/sh
 set -e
-service ssh start
+
+if [ "$SSH_ENABLED" = "true" ]; then
+    service ssh start
+fi 
+
 ./app
