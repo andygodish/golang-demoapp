@@ -46,5 +46,4 @@ EXPOSE 8080 8000 2222
 
 ENTRYPOINT [ "./entrypoint.sh" ] 
 
-CMD ./app
 
